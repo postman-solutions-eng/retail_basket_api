@@ -1,0 +1,537 @@
+openapi: 3.0.0
+info:
+  title: Basket
+  description: This is the API for adding products to a basket for checking out and ordering.
+  contact: {}
+  version: '1.0'
+servers:
+- url: http://example.com
+  variables: {}
+paths:
+  /basket/get:
+    get:
+      tags:
+      - Misc
+      summary: Get basket
+      description: Get the entire contents of a given basket.
+      operationId: GetBasket
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to be returned.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      responses:
+        200:
+          description: ''
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basket'
+              example:
+                items:
+                - id: XYZ-JEAN-123
+                  quantity: 1
+                - id: ABC-TOP-789
+                  quantity: 3
+      deprecated: false
+  /basket/submit_to_order:
+    get:
+      tags:
+      - Misc
+      summary: Submit to order
+      description: Submit basket to create an order and finalize purchase.
+      operationId: SubmitToOrder
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to purchase.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      responses:
+        200:
+          description: 'Success'
+          headers: {}
+        404:
+          description: 'Basket not found'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittoorder_4xx'
+              example:
+                status: failed
+                order_id: Basket does not exist
+        409:
+          description: 'Incorrect basket state'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Submittoorder_4xx'
+              example:
+                status: failed
+                order_id: Basket no longer in open state
+      deprecated: false
+  /basket/create:
+    get:
+      tags:
+      - Misc
+      summary: Create basket
+      description: Create a basket
+      operationId: CreateBasket
+      parameters:
+      - name: user_id
+        in: query
+        description: The ID of the user who will be the owner of the basket.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'MTU1MDg2MTI2MDQ0Mg=='
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      responses:
+        200:
+          description: 'Success'
+          headers: {}
+          content:
+            'application/json ':
+              schema:
+                $ref: '#/components/schemas/Create_200'
+              example:
+                status: success
+        404:
+          description: 'Invalid user specified'
+          headers: {}
+          content:
+            'application/json ':
+              schema:
+                $ref: '#/components/schemas/Create_404'
+              example:
+                status: success
+      deprecated: false
+  /basket/add_item:
+    post:
+      tags:
+      - Misc
+      summary: Add items to a given basket.
+      description: Add items to basket.
+      operationId: AddItem
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddRequest'
+            example:
+              items:
+              - id: XYZ-JEAN-123
+                quantity: 2
+              - id: ABC-TOP-789
+                quantity: 1
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+          content:
+            'application/json ':
+              schema:
+                $ref: '#/components/schemas/Add'
+              example:
+                status: success
+      deprecated: false
+  /basket/quantity:
+    patch:
+      tags:
+      - Misc
+      summary: Change quantity
+      description: Change the quantity of items/an item for a given basket.
+      operationId: ChangeQuantity
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      requestBody:
+        description: ''
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangequantityRequest'
+            example:
+              items:
+              - id: XYZ-JEAN-123
+                quantity: 1
+              - id: ABC-TOP-789
+                quantity: 3
+        required: true
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /basket/remove:
+    delete:
+      tags:
+      - Misc
+      summary: Remove from basket
+      description: Remove item(s) from a given basket.
+      operationId: Remove
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      responses:
+        200:
+          description: ''
+          headers: {}
+      deprecated: false
+  /basket/delete:
+    delete:
+      tags:
+      - Misc
+      summary: Delete basket
+      description: Delete a given basket.
+      operationId: DeleteBasket
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      responses:
+        200:
+          description: 'Success'
+          headers: {}
+        404:
+          description: 'Basket not found'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basketfailure_4xx'
+              example:
+                status: failed
+                order_id: Basket does not exist
+        409:
+          description: 'Incorrect basket state'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basketfailure_4xx'
+              example:
+                status: failed
+                order_id: Basket no longer in open state
+      deprecated: false
+  /basket/refresh:
+    refresh:
+      tags:
+      - Misc
+    summary: Refresh basket
+    description: Refresh a given basket.
+    operationId: RefreshBasket
+    parameters:
+    - name: id
+        in: query
+        description: The ID of the basket to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          example: application/json
+      responses:
+        200:
+          description: 'Success'
+          headers: {}
+        404:
+          description: 'Basket not found'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basketfailure_4xx'
+              example:
+                status: failed
+                order_id: Basket does not exist
+        409:
+          description: 'Incorrect basket state'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basketfailure_4xx'
+              example:
+                status: failed
+                order_id: Basket no longer in open state
+      deprecated: false
+components:
+  schemas:
+    Basket:
+      title: Basket
+      required:
+      - items
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: ''
+      example:
+        items:
+        - id: XYZ-JEAN-123
+          quantity: 1
+        - id: ABC-TOP-789
+          quantity: 3
+    Item:
+      title: Item
+      required:
+      - id
+      - quantity
+      type: object
+      properties:
+        id:
+          type: string
+        quantity:
+          type: integer
+          format: int32
+      example:
+        id: XYZ-JEAN-123
+        quantity: 1
+    Create_200:
+      title: 200 - Success
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+        order_id:
+          type: string
+      example:
+        status: success
+        order_id: 1550861260442-MTU1MDg2MTI2MDQ0Mg==
+        basket_state: open
+    Create_404:
+      title: 404 - Invalid user specified
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+        order_id:
+          type: string
+      example:
+        status: failed
+        message: User not found
+    Submittoorder_200:
+      title: 200 - Order created
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+        order_id:
+          type: string
+      example:
+        status: success
+        order_id: 1550861260442-MTU1MDg2MTI2MDQ0Mg==
+    Submittoorder_4xx:
+      title: 4xx - Submit order failure
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+        order_id:
+          type: string
+      example:
+        status: failed
+        message: Basket does not exist.
+    Deletebasket_200:
+      title: 200 - Order created
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+        order_id:
+          type: string
+      example:
+        status: success
+        order_id: 1550861260442-MTU1MDg2MTI2MDQ0Mg==
+    Basketfailure_4xx:
+      title: 4xx - Basket Failure
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+        order_id:
+          type: string
+      example:
+        status: failed
+        message: Basket does not exist.
+    AddRequest:
+      title: AddRequest
+      required:
+      - items
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: ''
+      example:
+        items:
+        - id: XYZ-JEAN-123
+          quantity: 2
+        - id: ABC-TOP-789
+          quantity: 1
+    AddItem:
+      title: AddItem
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+      example:
+        status: success
+    ChangequantityRequest:
+      title: ChangequantityRequest
+      required:
+      - items
+      type: object
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/Item'
+          description: ''
+      example:
+        items:
+        - id: XYZ-JEAN-123
+          quantity: 1
+        - id: ABC-TOP-789
+          quantity: 3
+    Changequantity:
+      title: Changequantity
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+      example:
+        status: success
+    Remove:
+      title: Remove
+      required:
+      - status
+      type: object
+      properties:
+        status:
+          type: string
+      example:
+        status: success
+tags:
+- name: Basket
+  description: 'The resources for working with a basket.'

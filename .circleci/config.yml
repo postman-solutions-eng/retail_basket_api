@@ -7,7 +7,7 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Postman CLI
+          name: Install THE Postman CLI
           command: |
             curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
       - run:

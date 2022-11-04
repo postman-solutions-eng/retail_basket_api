@@ -2,8 +2,13 @@ openapi: 3.0.0
 info:
   title: Basket
   description: This is the API for adding products to a basket for checking out and ordering.
-  contact: {}
+  contact: {
+    email: cooper@postman.com
+  }
   version: '1.0'
+security:
+  - apiKey: []
+
 servers:
 - url: http://example.com
   variables: {}
@@ -305,6 +310,8 @@ paths:
                 order_id: Basket no longer in open state
       deprecated: false
 components:
+  securitySchemes:
+    
   schemas:
     Basket:
       title: Basket

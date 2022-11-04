@@ -311,7 +311,11 @@ paths:
       deprecated: false
 components:
   securitySchemes:
-    
+    app_id:
+      type: apiKey
+      description: API key to authorize requests.
+      name: appid
+      in: query
   schemas:
     Basket:
       title: Basket

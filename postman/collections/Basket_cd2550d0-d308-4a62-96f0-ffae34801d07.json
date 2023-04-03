@@ -1,29 +1,36 @@
 {
 	"info": {
-		"_postman_id": "0b1af7de-53b8-40ea-91fe-e21b60cb7a65",
+		"_postman_id": "33dae607-6fdf-43b9-a2db-b7c77187d0ee",
 		"name": "Basket",
-		"description": "# Orders - Endpoints for managing a user's order\n<img src=\"http://simpleicon.com/wp-content/uploads/basket.png\" alt=\"drawing\" width=\"30\" height=\"30\"/></img>\n\nThis collection includes api's for managing and updating a basket during its finalization and after purchase. Prior to completing the purchase, a user can update information associated with the order including shipping and billing addresses as well as payment method. Submitting an order to purchase will complete the purchase process, permanently associate the relevant basket information with the order, and delete the associated basket.\n\nOrders are created from the `Submit to order` endpoint in the [Basket](https://retail-demo.postman.co/workspace/100e5a1b-07cd-4b14-b2e1-df8da7d81ae2/collection/16340833-02074e01-b519-4667-b1ac-92ece5621802?ctx=documentation) collectionThis is the API for adding products to a basket for checking out and ordering.",
+		"description": "# Basket - Endpoints for managing a user's basket\n<img src=\"https://img.icons8.com/pastel-glyph/2x/shopping-basket-2--v2.png\" alt=\"drawing\" width=\"30\" height=\"30\"/></img>\n\nThis collection includes api's for managing a user's basket prior to submitting it as an order. `submit_to_order` is the endpoint that the user will using to create an order object. During the lifecycle of a basket, it will have one of the following states:\n\n| State | Description |\n| :-----: | ----------- |\n| open  | From the time of basket creation until the order is created |\n| purchase_pending | From the time that the user has decided to purchase until the purchase is complete. At this time, the basket will not be modifiable. |\n\nWith the exception of \"Create Basket\", all requests require that the basket's ID be specified as an `id` URL parameter.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_uid": "24113304-0b1af7de-53b8-40ea-91fe-e21b60cb7a65"
+		"_uid": "24113304-33dae607-6fdf-43b9-a2db-b7c77187d0ee"
 	},
 	"item": [
 		{
-			"name": "Submit to order",
+			"name": "Create basket",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "5c48ad48-9e91-4b3a-aa23-70cb79aaeea9",
+						"id": "aee34a37-e869-461a-8e09-3a6a058fac68",
 						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response validation\", function () {",
+							"    pm.expect(pm.response.json()).to.have.property('id');",
+							"    pm.expect(pm.response.json()).to.have.property('status');",
+							"    pm.expect(pm.response.json()).to.have.property('basket_state');",
+							"    pm.expect(pm.response.json().basket_state).to.eq('open');",
 							"});"
 						]
 					}
 				}
 			],
-			"id": "78525180-735d-47ab-a5fb-47d2cd2f4ed1",
+			"id": "43db4f56-f40f-49bc-a4e7-5462fc12df58",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -31,134 +38,44 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{basketUrl}}/basket/submit_to_order?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+					"raw": "{{basketUrl}}/basket/create?user_id=MTU1MDg2MTI2MDQ0Mg==",
 					"host": [
 						"{{basketUrl}}"
 					],
 					"path": [
 						"basket",
-						"submit_to_order"
+						"create"
 					],
 					"query": [
 						{
-							"description": "(Required) The ID of the basket to purchase.",
-							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+							"description": "User ID of the consumer that is creating the bakset",
+							"key": "user_id",
+							"value": "MTU1MDg2MTI2MDQ0Mg=="
 						}
 					]
 				},
-				"description": "Submit basket to create an order and finalize purchase."
+				"description": "Create a basket"
 			},
 			"response": [
 				{
-					"id": "e087b701-649d-43c8-8d0a-07a63dba07f1",
+					"id": "4fe1254a-bbe5-4965-bf8b-2fe7f183a39f",
 					"name": "200 - Success",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{baseUrl}}/basket/submit_to_order?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
-							"host": [
-								"{{baseUrl}}"
-							],
-							"path": [
-								"basket",
-								"submit_to_order"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
-					"header": [],
-					"cookie": [],
-					"responseTime": null,
-					"body": ""
-				}
-			]
-		},
-		{
-			"name": "Remove from basket",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "af015839-004f-4a62-a624-144b7dfd98fd",
-						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"id": "e077b243-4cf1-4fb4-aefd-a6cbfdea2b20",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "DELETE",
-				"header": [],
-				"url": {
-					"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
-					"host": [
-						"{{basketUrl}}"
-					],
-					"path": [
-						"basket",
-						"remove"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9",
-							"description": "(Required) The ID of the basket to modify."
-						}
-					]
-				},
-				"description": "Remove item(s) from a given basket."
-			},
-			"response": [
-				{
-					"id": "d072339a-0fa1-4f2b-acee-8a82a2609f78",
-					"name": "200 - Success",
-					"originalRequest": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "<string>"
-							},
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 2\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 1\n        }\n    ]\n}"
-						},
-						"url": {
-							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+							"raw": "{{basketUrl}}/basket/create?user_id=MTU1MDg2MTI2MDQ0Mg==",
 							"host": [
 								"{{basketUrl}}"
 							],
 							"path": [
 								"basket",
-								"remove"
+								"create"
 							],
 							"query": [
 								{
-									"key": "id",
-									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+									"key": "user_id",
+									"value": "MTU1MDg2MTI2MDQ0Mg=="
 								}
 							]
 						}
@@ -167,30 +84,35 @@
 					"code": 200,
 					"_postman_previewlanguage": "Text",
 					"_postman_previewtype": "html",
-					"header": [],
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
 					"cookie": [],
 					"responseTime": null,
-					"body": ""
+					"body": "{\n    \"id\":           \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":       \"success\",\n    \"basket_state\": \"open\"\n}"
 				},
 				{
-					"id": "185dcca3-a58a-4313-bcf5-ac1f84e0151b",
-					"name": "404 - Basket not found",
+					"id": "2d882834-6a6a-4fdc-8d0b-12b1a37506f7",
+					"name": "404 - Invalid user specified",
 					"originalRequest": {
-						"method": "DELETE",
+						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
+							"raw": "{{basketUrl}}/basket/create?user_id=MTU1MDg2MTI2MDQ0Mg==",
 							"host": [
 								"{{basketUrl}}"
 							],
 							"path": [
 								"basket",
-								"remove"
+								"create"
 							],
 							"query": [
 								{
-									"key": "id",
-									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
+									"key": "user_id",
+									"value": "MTU1MDg2MTI2MDQ0Mg=="
 								}
 							]
 						}
@@ -207,187 +129,7 @@
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
-				},
-				{
-					"id": "1af13186-394a-41f0-9fe0-1f3f56c96b9b",
-					"name": "404 - Invalid item specified",
-					"originalRequest": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
-							"host": [
-								"{{basketUrl}}"
-							],
-							"path": [
-								"basket",
-								"remove"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
-								}
-							]
-						}
-					},
-					"status": "Not Found",
-					"code": 404,
-					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"responseTime": null,
-					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Invalid item specified\"\n}"
-				},
-				{
-					"id": "dc6abf6c-3466-42c1-ab74-0b4650a39d61",
-					"name": "409 - Basket not modifiable Copy",
-					"originalRequest": {
-						"method": "DELETE",
-						"header": [],
-						"url": {
-							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
-							"host": [
-								"{{basketUrl}}"
-							],
-							"path": [
-								"basket",
-								"remove"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
-								}
-							]
-						}
-					},
-					"status": "Conflict",
-					"code": 409,
-					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"responseTime": null,
-					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket not modifiable\"\n}"
-				}
-			]
-		},
-		{
-			"name": "Get basket",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"id": "6c8e20ab-fe8b-4892-b059-22e7150416ff",
-						"exec": [
-							"var jsonData = pm.response.json();",
-							"",
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});",
-							"",
-							"pm.test(\"Expect an items array\", function () {",
-							"    pm.expect(jsonData).to.have.property(\"items\");",
-							"});",
-							"",
-							"pm.test(\"Expect items to have an ID and quantity\", function () {",
-							"    for (var i = 0; i < jsonData.items.length; i++) {",
-							"        pm.expect(jsonData.items[i]).to.include.all.keys(\"id\", \"quantity\");",
-							"    }",
-							"});",
-							"",
-							"pm.test(\"Expect item ID to be string\", function () {",
-							"    for (var i = 0; i < jsonData.items.length; i++) {",
-							"        pm.expect(jsonData.items[i].id).to.be.a('string');",
-							"    }",
-							"});",
-							"",
-							"pm.test(\"Expect item quantity to be a number\", function () {",
-							"    for (var i = 0; i < jsonData.items.length; i++) {",
-							"        pm.expect(jsonData.items[i].quantity).to.be.a('number');",
-							"    }",
-							"});"
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"id": "9c503c2c-1e88-4341-b076-91bb8a19df0b",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [],
-				"url": {
-					"raw": "{{basketUrl}}/basket/get?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
-					"host": [
-						"{{basketUrl}}"
-					],
-					"path": [
-						"basket",
-						"get"
-					],
-					"query": [
-						{
-							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9",
-							"description": "(Required) The ID of the basket to be returned."
-						}
-					]
-				},
-				"description": "Get the entire contents of a given basket."
-			},
-			"response": [
-				{
-					"id": "97265b1f-a937-4c39-9429-a335d174abd1",
-					"name": "200 - Success",
-					"originalRequest": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{basketUrl}}/basket/get?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
-							"host": [
-								"{{basketUrl}}"
-							],
-							"path": [
-								"basket",
-								"get"
-							],
-							"query": [
-								{
-									"key": "id",
-									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
-								}
-							]
-						}
-					},
-					"status": "OK",
-					"code": 200,
-					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
-					"header": [
-						{
-							"key": "Content-Type",
-							"value": "application/json"
-						}
-					],
-					"cookie": [],
-					"responseTime": null,
-					"body": "{\n    \"id\":           \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":       \"success\",\n    \"basket_state\": \"open\",\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 1\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 3\n        }\n    ],\n    \"user_id\":      \"MTU1MDg2MTI2MDQ0Mg==\"\n}"
+					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"User not found\"\n}"
 				}
 			]
 		},
@@ -397,21 +139,24 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "2f8f7d62-679f-4e9e-9fe4-4d30d117e66b",
+						"id": "a068e249-805c-48f1-994c-a94f535d3c6f",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
-			"id": "595397a5-a02a-4388-ab69-dba34811d79e",
+			"id": "e4e04ea9-1a0a-421d-b28b-2581aa9bb850",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "POST",
 				"header": [
 					{
@@ -421,10 +166,10 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 2\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 1\n        }\n    ]\n}"
+					"raw": "{\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 1\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 3\n        }\n    ]\n}"
 				},
 				"url": {
-					"raw": "{{basketUrl}}/basket/add_item?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+					"raw": "{{basketUrl}}/basket/add_item?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
 					"host": [
 						"{{basketUrl}}"
 					],
@@ -434,9 +179,9 @@
 					],
 					"query": [
 						{
+							"description": "The ID of the basket to modify.",
 							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9",
-							"description": "(Required) The ID of the basket to modify."
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
 						}
 					]
 				},
@@ -444,7 +189,7 @@
 			},
 			"response": [
 				{
-					"id": "2c7f1e0a-129a-4364-8db0-bd9f80c26361",
+					"id": "dd43a26c-da1d-4c91-a2eb-56bf71248a4c",
 					"name": "200 - Success",
 					"originalRequest": {
 						"method": "POST",
@@ -496,74 +241,94 @@
 			]
 		},
 		{
-			"name": "Create basket",
+			"name": "Get basket",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
-						"id": "213679c9-9962-408f-a329-69b24ed91e66",
+						"id": "24a3bbd2-3d16-4622-81be-263374426834",
+						"type": "text/javascript",
 						"exec": [
+							"var jsonData = pm.response.json();",
+							"",
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
-							"pm.test(\"Response validation\", function () {",
-							"    pm.expect(pm.response.json()).to.have.property('id');",
-							"    pm.expect(pm.response.json()).to.have.property('status');",
-							"    pm.expect(pm.response.json()).to.have.property('basket_state');",
-							"    pm.expect(pm.response.json().basket_state).to.eq('open');",
+							"pm.test(\"Expect an items array\", function () {",
+							"    pm.expect(jsonData).to.have.property(\"items\");",
+							"});",
+							"",
+							"pm.test(\"Expect items to have an ID and quantity\", function () {",
+							"    for (var i = 0; i < jsonData.items.length; i++) {",
+							"        pm.expect(jsonData.items[i]).to.include.all.keys(\"id\", \"quantity\");",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Expect item ID to be string\", function () {",
+							"    for (var i = 0; i < jsonData.items.length; i++) {",
+							"        pm.expect(jsonData.items[i].id).to.be.a('string');",
+							"    }",
+							"});",
+							"",
+							"pm.test(\"Expect item quantity to be a number\", function () {",
+							"    for (var i = 0; i < jsonData.items.length; i++) {",
+							"        pm.expect(jsonData.items[i].quantity).to.be.a('number');",
+							"    }",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
-			"id": "a12c982a-8700-4b19-b17a-86f1297e5d72",
+			"id": "c360382e-707e-4e82-98f4-a36e220db214",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{basketUrl}}/basket/create?user_id=MTU1MDg2MTI2MDQ0Mg==",
+					"raw": "{{basketUrl}}/basket/get?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
 					"host": [
 						"{{basketUrl}}"
 					],
 					"path": [
 						"basket",
-						"create"
+						"get"
 					],
 					"query": [
 						{
-							"key": "user_id",
-							"value": "MTU1MDg2MTI2MDQ0Mg==",
-							"description": "(Required) The ID of the user who will be the owner of the basket."
+							"description": "The ID of the basket to be returned.",
+							"key": "id",
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
 						}
 					]
 				},
-				"description": "Create a basket"
+				"description": "Get the entire contents of a given basket."
 			},
 			"response": [
 				{
-					"id": "22cff241-2214-4676-971c-089b6305ff30",
+					"id": "42ed5d91-45c3-487f-9126-1829d9cecff2",
 					"name": "200 - Success",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basketUrl}}/basket/create?user_id=MTU1MDg2MTI2MDQ0Mg==",
+							"raw": "{{basketUrl}}/basket/get?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
 							"host": [
 								"{{basketUrl}}"
 							],
 							"path": [
 								"basket",
-								"create"
+								"get"
 							],
 							"query": [
 								{
-									"key": "user_id",
-									"value": "MTU1MDg2MTI2MDQ0Mg=="
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
 								}
 							]
 						}
@@ -580,27 +345,27 @@
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n    \"id\":           \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":       \"success\",\n    \"basket_state\": \"open\"\n}"
+					"body": "{\n    \"id\":           \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":       \"success\",\n    \"basket_state\": \"open\",\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 1\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 3\n        }\n    ],\n    \"user_id\":      \"MTU1MDg2MTI2MDQ0Mg==\"\n}"
 				},
 				{
-					"id": "323a6f8e-ce4a-457f-b795-0bc8f5407a2d",
-					"name": "404 - Invalid user specified",
+					"id": "4a574658-0f72-4ab2-bfaf-ad47c71c6c5b",
+					"name": "404 - Basket not found",
 					"originalRequest": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "{{basketUrl}}/basket/create?user_id=MTU1MDg2MTI2MDQ0Mg==",
+							"raw": "{{basketUrl}}/basket/get?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
 							"host": [
 								"{{basketUrl}}"
 							],
 							"path": [
 								"basket",
-								"create"
+								"get"
 							],
 							"query": [
 								{
-									"key": "user_id",
-									"value": "MTU1MDg2MTI2MDQ0Mg=="
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
 								}
 							]
 						}
@@ -617,7 +382,220 @@
 					],
 					"cookie": [],
 					"responseTime": null,
-					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"User not found\"\n}"
+					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist.\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Remove from basket",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "cfdd3acb-1629-4a37-9ede-b252f926ccb4",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"id": "683538ae-ba51-4ac7-b53e-920cec965ede",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"items\": [\n        \"XYZ-JEAN-123\",\n        \"ABC-TOP-789\"\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+					"host": [
+						"{{basketUrl}}"
+					],
+					"path": [
+						"basket",
+						"remove"
+					],
+					"query": [
+						{
+							"description": "The ID of the basket to modify.",
+							"key": "id",
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+						}
+					]
+				},
+				"description": "Remove item(s) from a given basket."
+			},
+			"response": [
+				{
+					"id": "0a0f1865-efb0-4dc4-bae0-43fe4551cf9a",
+					"name": "200 - Success",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "<string>"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 2\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 1\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+							"host": [
+								"{{basketUrl}}"
+							],
+							"path": [
+								"basket",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"_postman_previewtype": "html",
+					"header": [],
+					"cookie": [],
+					"responseTime": null,
+					"body": ""
+				},
+				{
+					"id": "4f4ca938-6392-4724-96f5-1e392c474ea4",
+					"name": "404 - Basket not found",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
+							"host": [
+								"{{basketUrl}}"
+							],
+							"path": [
+								"basket",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "Text",
+					"_postman_previewtype": "html",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
+				},
+				{
+					"id": "fdaecf65-8494-419c-bfcf-49e6a9796544",
+					"name": "404 - Invalid item specified",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
+							"host": [
+								"{{basketUrl}}"
+							],
+							"path": [
+								"basket",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
+								}
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "Text",
+					"_postman_previewtype": "html",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Invalid item specified\"\n}"
+				},
+				{
+					"id": "14307ba9-7200-41cb-aa4d-2f89c39106fd",
+					"name": "409 - Basket not modifiable Copy",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{basketUrl}}/basket/remove?id=ebceac76-e4a2-409b-8fc4-17709947e6a8",
+							"host": [
+								"{{basketUrl}}"
+							],
+							"path": [
+								"basket",
+								"remove"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a8"
+								}
+							]
+						}
+					},
+					"status": "Conflict",
+					"code": 409,
+					"_postman_previewlanguage": "Text",
+					"_postman_previewtype": "html",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"responseTime": null,
+					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket not modifiable\"\n}"
 				}
 			]
 		},
@@ -627,21 +605,24 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "05e6a88e-7b88-483d-8d30-256e22b23829",
+						"id": "2deb5406-2e93-4fc0-97b7-ad68a8a3d4c2",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
-			"id": "6f9a5612-dfe1-4bb6-9e7e-29ae337e50be",
+			"id": "61d45ce4-f9cb-4a92-a0b4-5c18e706ec1b",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "DELETE",
 				"header": [],
 				"url": {
@@ -655,9 +636,9 @@
 					],
 					"query": [
 						{
+							"description": "The ID of the basket to modify.",
 							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9",
-							"description": "(Required) The ID of the basket to modify."
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
 						}
 					]
 				},
@@ -665,7 +646,7 @@
 			},
 			"response": [
 				{
-					"id": "8ada615a-0bf0-4702-a891-0bb7ff112934",
+					"id": "39ad9a56-f91a-4bc5-b011-b3871bcb517e",
 					"name": "200 - Success",
 					"originalRequest": {
 						"method": "DELETE",
@@ -710,7 +691,7 @@
 					"body": ""
 				},
 				{
-					"id": "ca8ab900-d8fe-4af6-a483-c924db637aef",
+					"id": "f72b23f3-d6ca-43e5-a060-4e6bc492852e",
 					"name": "404 - Basket not found",
 					"originalRequest": {
 						"method": "DELETE",
@@ -747,7 +728,7 @@
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
 				},
 				{
-					"id": "10b6da67-35a3-4ff9-85f4-651ca943ef3e",
+					"id": "e7ada2d4-0a0d-4a2b-ba00-2f50be9b5245",
 					"name": "409 - Basket not deletable",
 					"originalRequest": {
 						"method": "DELETE",
@@ -791,21 +772,24 @@
 				{
 					"listen": "test",
 					"script": {
-						"id": "2c91e286-8078-423b-9c61-9dcada5d7f4e",
+						"id": "ed98da71-753c-41c3-a964-b7ff737ba78b",
+						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});"
-						],
-						"type": "text/javascript"
+						]
 					}
 				}
 			],
-			"id": "7d041ba0-607a-46cf-8645-f8bd3fb01ebd",
+			"id": "3189fe82-1078-477d-8593-b9eae7d57694",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
+				"auth": {
+					"type": "noauth"
+				},
 				"method": "PATCH",
 				"header": [
 					{
@@ -828,9 +812,9 @@
 					],
 					"query": [
 						{
+							"description": "The ID of the basket to modify.",
 							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9",
-							"description": "(Required) The ID of the basket to modify."
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
 						}
 					]
 				},
@@ -838,7 +822,7 @@
 			},
 			"response": [
 				{
-					"id": "76524565-1fef-4f8c-82e3-39b3b7bccd9d",
+					"id": "8135522b-d36b-426c-b5e9-28c8dd60bbf4",
 					"name": "200 - Success",
 					"originalRequest": {
 						"method": "PATCH",
@@ -883,7 +867,7 @@
 					"body": ""
 				},
 				{
-					"id": "434c14fc-757f-409f-8adc-578a8a886db3",
+					"id": "732258dd-9545-43ce-ba96-60cb5cbb9396",
 					"name": "404 - Basket not found",
 					"originalRequest": {
 						"method": "GET",
@@ -920,7 +904,7 @@
 					"body": "{\n    \"id\":       \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
 				},
 				{
-					"id": "167044aa-95f1-48b4-9fc4-58cb7f9685a6",
+					"id": "100aa252-55f5-441d-8752-af1c66d4288f",
 					"name": "404 - Invalid item specified",
 					"originalRequest": {
 						"method": "GET",
@@ -957,7 +941,7 @@
 					"body": "{\n    \"id\":       \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":   \"failed\",\n    \"message\":  \"Invalid item specified\"\n}"
 				},
 				{
-					"id": "7fad94ce-d574-4dff-a9cb-46d30c16b86f",
+					"id": "9ba49900-0f7b-4578-92cc-2d894cf4d7aa",
 					"name": "409 - Basket not modifiable",
 					"originalRequest": {
 						"method": "GET",
@@ -994,11 +978,88 @@
 					"body": "{\n    \"id\":       \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":   \"failed\",\n    \"message\":  \"Basket not modifiable\"\n}"
 				}
 			]
+		},
+		{
+			"name": "Submit to order",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "c9c838ba-e9e1-4a08-99ac-ec0ed0872276",
+						"type": "text/javascript",
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});"
+						]
+					}
+				}
+			],
+			"id": "11964fb2-b9bd-4fb9-97c0-188f0dbcecfb",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{basketUrl}}/basket/submit_to_order?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+					"host": [
+						"{{basketUrl}}"
+					],
+					"path": [
+						"basket",
+						"submit_to_order"
+					],
+					"query": [
+						{
+							"description": "(Required) The ID of the basket to purchase.",
+							"key": "id",
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+						}
+					]
+				},
+				"description": "Submit basket to create an order and finalize purchase."
+			},
+			"response": [
+				{
+					"id": "ae8ec17b-a4f6-4b1b-937c-f63e93273cc9",
+					"name": "200 - Success",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/basket/submit_to_order?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"basket",
+								"submit_to_order"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "Text",
+					"_postman_previewtype": "html",
+					"header": [],
+					"cookie": [],
+					"responseTime": null,
+					"body": ""
+				}
+			]
 		}
 	],
 	"variable": [
 		{
-			"id": "09ae23a3-3430-4717-8d5e-b25b55c1d789",
+			"id": "98adc7b2-c5de-4fb5-99fa-c062d13a2e4c",
 			"key": "baseUrl",
 			"value": "http://example.com",
 			"type": "string"

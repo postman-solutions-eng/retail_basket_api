@@ -2,10 +2,13 @@ openapi: 3.0.0
 info:
   title: Basket
   description: This is the API for adding products to a basket for checking out and ordering.
-  contact: {}
+  contact:
+    name: Example Support
+    email: support@example.com
+    url: support.example.com
   version: '1.0'
 servers:
-- url: http://example.com
+- url: https://bec11d1d-2eed-4430-879f-0b2953d6b2b1.mock.pstmn.io
   variables: {}
 paths:
   /basket/get:
@@ -23,6 +26,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/Basket'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
       responses:
@@ -39,8 +43,10 @@ paths:
                   quantity: 1
                 - id: ABC-TOP-789
                   quantity: 3
+        500:
+          description: Internal server error
       deprecated: false
-  /basket/submit_to_order:
+  /basket/submit-to-order:
     get:
       tags:
       - Misc
@@ -55,6 +61,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/Basket'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
       responses:
@@ -81,6 +88,8 @@ paths:
               example:
                 status: failed
                 order_id: Basket no longer in open state
+        500:
+          description: Internal server error
       deprecated: false
   /basket/create:
     get:
@@ -97,6 +106,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/Basket'
           type: string
           example: 'MTU1MDg2MTI2MDQ0Mg=='
       - name: Content-Type
@@ -106,6 +116,7 @@ paths:
         style: simple
         explode: false
         schema:
+          $ref: '#/components/schemas/Basket'
           type: string
           example: application/json
       responses:
@@ -127,13 +138,15 @@ paths:
                 $ref: '#/components/schemas/Create_404'
               example:
                 status: success
+        500:
+          description: Internal server error
       deprecated: false
-  /basket/add_item:
+  /basket/add-item:
     post:
       tags:
       - Misc
-      summary: Add items to a given basket.
-      description: Add items to basket.
+      summary: Add items to a given basket
+      description: Add items to basket
       operationId: AddItem
       parameters:
       - name: id
@@ -143,6 +156,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/Add'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
       - name: Content-Type
@@ -152,6 +166,7 @@ paths:
         style: simple
         explode: false
         schema:
+          $ref: '#/components/schemas/Add'
           type: string
           example: application/json
       requestBody:
@@ -177,6 +192,8 @@ paths:
                 $ref: '#/components/schemas/Add'
               example:
                 status: success
+        500:
+          description: Internal server error
       deprecated: false
   /basket/quantity:
     patch:
@@ -193,6 +210,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/Item'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
       - name: Content-Type
@@ -202,6 +220,7 @@ paths:
         style: simple
         explode: false
         schema:
+          $ref: '#/components/schemas/Item'
           type: string
           example: application/json
       requestBody:
@@ -221,6 +240,8 @@ paths:
         200:
           description: ''
           headers: {}
+        500:
+          description: Internal server error
       deprecated: false
   /basket/remove:
     delete:
@@ -237,6 +258,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/Create_200'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
       - name: Content-Type
@@ -246,12 +268,15 @@ paths:
         style: simple
         explode: false
         schema:
+          $ref: '#/components/schemas/Create_200'
           type: string
           example: application/json
       responses:
         200:
           description: ''
           headers: {}
+        500:
+          description: Internal server error
       deprecated: false
   /basket/delete:
     delete:
@@ -268,6 +293,7 @@ paths:
         style: form
         explode: true
         schema:
+          $ref: '#/components/schemas/ChangequantityRequest'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
       - name: Content-Type
@@ -277,6 +303,7 @@ paths:
         style: simple
         explode: false
         schema:
+          $ref: '#/components/schemas/ChangequantityRequest'
           type: string
           example: application/json
       responses:
@@ -303,8 +330,70 @@ paths:
               example:
                 status: failed
                 order_id: Basket no longer in open state
+        500:
+          description: Internal server error
       deprecated: false
+  /basket/refresh:
+    put:
+      tags:
+        - basket
+      summary: Refresh your basket
+      description: Refresh a given basket.
+      operationId: RefreshBasket
+      parameters:
+      - name: id
+        in: query
+        description: The ID of the basket to modify.
+        required: true
+        style: form
+        explode: true
+        schema:
+          $ref: '#/components/schemas/Basket'
+          type: string
+          example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+      - name: Content-Type
+        in: header
+        description: ''
+        required: true
+        style: simple
+        explode: false
+        schema:
+          $ref: '#/components/schemas/ChangequantityRequest'
+          type: string
+          example: application/json
+      responses:
+        200:
+          description: 'Success'
+          headers: {}
+        404:
+          description: 'Basket not found'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basketfailure_4xx'
+              example:
+                status: failed
+                order_id: Basket does not exist
+        409:
+          description: 'Incorrect basket state'
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Basketfailure_4xx'
+              example:
+                status: failed
+                order_id: Basket no longer in open state
+        500:
+          description: Internal server error
+      deprecated: false
+
 components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
   schemas:
     Basket:
       title: Basket
@@ -481,6 +570,11 @@ components:
           type: string
       example:
         status: success
+
 tags:
 - name: Basket
   description: 'The resources for working with a basket.'
+
+# COMMENT OUT THE FOLLOWING TWO LINES TO DEMO AN ERROR
+security:
+  - BasicAuth: []

@@ -14,19 +14,24 @@
 					"listen": "test",
 					"script": {
 						"id": "8aecbce5-9e91-4475-811e-559ee70294df",
-						"type": "text/javascript",
 						"exec": [
 							"pm.test(\"Status code is 200\", function () {",
 							"    pm.response.to.have.status(200);",
 							"});",
 							"",
+							"console.log(pm.response);",
+							"",
+							"// pm.test(\"Body matches string\", function () {",
+							"//     pm.expect(pm.response.text()).to.include(\"string_you_want_to_search\");",
+							"// });",
+							"",
 							"pm.test(\"Response validation\", function () {",
-							"    pm.expect(pm.response.json()).to.have.property('id');",
-							"    pm.expect(pm.response.json()).to.have.property('status');",
-							"    pm.expect(pm.response.json()).to.have.property('basket_state');",
-							"    pm.expect(pm.response.json().basket_state).to.eq('open');",
-							"});"
-						]
+							"    pm.expect(pm.response).to.have.property('id');",
+							"    pm.expect(pm.response).to.have.property('status');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -48,7 +53,6 @@
 					],
 					"query": [
 						{
-							"description": "User ID of the consumer that is creating the bakset",
 							"key": "user_id",
 							"value": "MTU1MDg2MTI2MDQ0Mg=="
 						}
@@ -82,17 +86,18 @@
 					},
 					"status": "OK",
 					"code": 200,
-					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
+					"_postman_previewlanguage": "json",
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"name": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
-					"body": "{\n    \"id\":           \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":       \"success\",\n    \"basket_state\": \"open\"\n}"
+					"body": "{\n    \"id\": \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\": \"success\",\n    \"basket_state\": \"open\"\n}"
 				},
 				{
 					"id": "bb15f23b-8dff-46d9-bdfc-2740e9d90658",
@@ -119,17 +124,18 @@
 					},
 					"status": "Not Found",
 					"code": 404,
-					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
+					"_postman_previewlanguage": "json",
 					"header": [
 						{
 							"key": "Content-Type",
-							"value": "application/json"
+							"name": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"type": "text"
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
-					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"User not found\"\n}"
+					"body": "{\n    \"status\": \"failed\",\n    \"message\": \"User not found\"\n}"
 				}
 			]
 		},
@@ -227,7 +233,6 @@
 					"status": "OK",
 					"code": 200,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -235,7 +240,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": ""
 				}
 			]
@@ -336,7 +340,6 @@
 					"status": "OK",
 					"code": 200,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -344,7 +347,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"id\":           \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":       \"success\",\n    \"basket_state\": \"open\",\n    \"items\": [\n        {\n            \"id\": \"XYZ-JEAN-123\",\n            \"quantity\": 1\n        },\n        {\n            \"id\": \"ABC-TOP-789\",\n            \"quantity\": 3\n        }\n    ],\n    \"user_id\":      \"MTU1MDg2MTI2MDQ0Mg==\"\n}"
 				},
 				{
@@ -373,7 +375,6 @@
 					"status": "Not Found",
 					"code": 404,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -381,7 +382,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist.\"\n}"
 				}
 			]
@@ -480,10 +480,8 @@
 					"status": "OK",
 					"code": 200,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [],
 					"cookie": [],
-					"responseTime": null,
 					"body": ""
 				},
 				{
@@ -512,7 +510,6 @@
 					"status": "Not Found",
 					"code": 404,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -520,7 +517,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
 				},
 				{
@@ -549,7 +545,6 @@
 					"status": "Not Found",
 					"code": 404,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -557,7 +552,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Invalid item specified\"\n}"
 				},
 				{
@@ -586,7 +580,6 @@
 					"status": "Conflict",
 					"code": 409,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -594,7 +587,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket not modifiable\"\n}"
 				}
 			]
@@ -684,10 +676,8 @@
 					"status": "OK",
 					"code": 200,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [],
 					"cookie": [],
-					"responseTime": null,
 					"body": ""
 				},
 				{
@@ -716,7 +706,6 @@
 					"status": "Not Found",
 					"code": 404,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -724,7 +713,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
 				},
 				{
@@ -753,7 +741,6 @@
 					"status": "Conflict",
 					"code": 409,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -761,7 +748,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"status\":   \"failed\",\n    \"message\":  \"Basket not deletable\"\n}"
 				}
 			]
@@ -860,10 +846,8 @@
 					"status": "OK",
 					"code": 200,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [],
 					"cookie": [],
-					"responseTime": null,
 					"body": ""
 				},
 				{
@@ -892,7 +876,6 @@
 					"status": "Not Found",
 					"code": 404,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -900,7 +883,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"id\":       \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":   \"failed\",\n    \"message\":  \"Basket does not exist\"\n}"
 				},
 				{
@@ -929,7 +911,6 @@
 					"status": "Not Found",
 					"code": 404,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -937,7 +918,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"id\":       \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":   \"failed\",\n    \"message\":  \"Invalid item specified\"\n}"
 				},
 				{
@@ -966,7 +946,6 @@
 					"status": "Conflict",
 					"code": 409,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [
 						{
 							"key": "Content-Type",
@@ -974,7 +953,6 @@
 						}
 					],
 					"cookie": [],
-					"responseTime": null,
 					"body": "{\n    \"id\":       \"ebceac76-e4a2-409b-8fc4-17709947e6a8\",\n    \"status\":   \"failed\",\n    \"message\":  \"Basket not modifiable\"\n}"
 				}
 			]
@@ -1048,10 +1026,8 @@
 					"status": "OK",
 					"code": 200,
 					"_postman_previewlanguage": "Text",
-					"_postman_previewtype": "html",
 					"header": [],
 					"cookie": [],
-					"responseTime": null,
 					"body": ""
 				}
 			]

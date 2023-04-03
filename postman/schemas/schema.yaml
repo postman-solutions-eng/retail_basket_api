@@ -10,7 +10,7 @@ security:
   - apiKey: []
 
 servers:
-- url: http://example.com
+- url: https://example.com
   variables: {}
 paths:
   /basket/get:
@@ -30,6 +30,7 @@ paths:
         schema:
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: ''
@@ -44,6 +45,8 @@ paths:
                   quantity: 1
                 - id: ABC-TOP-789
                   quantity: 3
+        '500':
+          description: A server error response
       deprecated: false
   /basket/submit_to_order:
     get:
@@ -62,6 +65,7 @@ paths:
         schema:
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Submittoorder'
       responses:
         200:
           description: 'Success'
@@ -86,6 +90,8 @@ paths:
               example:
                 status: failed
                 order_id: Basket no longer in open state
+        '500':
+          description: A server error response
       deprecated: false
   /basket/create:
     get:
@@ -104,6 +110,7 @@ paths:
         schema:
           type: string
           example: 'MTU1MDg2MTI2MDQ0Mg=='
+          $ref: '#/components/schemas/Basket'
       - name: Content-Type
         in: header
         description: ''
@@ -113,6 +120,7 @@ paths:
         schema:
           type: string
           example: application/json
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: 'Success'
@@ -132,13 +140,15 @@ paths:
                 $ref: '#/components/schemas/Create_404'
               example:
                 status: success
+        '500':
+          description: A server error response
       deprecated: false
-  /basket/add_item:
+  /basket/add-item:
     post:
       tags:
       - Misc
-      summary: Add items to a given basket.
-      description: Add items to basket.
+      summary: Add items to a given basket
+      description: Add items to basket
       operationId: AddItem
       parameters:
       - name: id
@@ -150,6 +160,7 @@ paths:
         schema:
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/AddRequest'
       - name: Content-Type
         in: header
         description: ''
@@ -159,6 +170,7 @@ paths:
         schema:
           type: string
           example: application/json
+          $ref: '#/components/schemas/AddRequest'
       requestBody:
         description: ''
         content:
@@ -182,6 +194,8 @@ paths:
                 $ref: '#/components/schemas/Add'
               example:
                 status: success
+        '500':
+          description: A server error response
       deprecated: false
   /basket/quantity:
     patch:
@@ -200,6 +214,7 @@ paths:
         schema:
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/ChangequantityRequest'
       - name: Content-Type
         in: header
         description: ''
@@ -209,6 +224,7 @@ paths:
         schema:
           type: string
           example: application/json
+          $ref: '#/components/schemas/ChangequantityRequest'
       requestBody:
         description: ''
         content:
@@ -226,6 +242,8 @@ paths:
         200:
           description: ''
           headers: {}
+        '500':
+          description: A server error response
       deprecated: false
   /basket/remove:
     delete:
@@ -244,6 +262,7 @@ paths:
         schema:
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Basket'
       - name: Content-Type
         in: header
         description: ''
@@ -253,10 +272,13 @@ paths:
         schema:
           type: string
           example: application/json
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: ''
           headers: {}
+        '500':
+          description: A server error response
       deprecated: false
   /basket/delete:
     delete:
@@ -275,6 +297,7 @@ paths:
         schema:
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Basket'
       - name: Content-Type
         in: header
         description: ''
@@ -284,6 +307,7 @@ paths:
         schema:
           type: string
           example: application/json
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: 'Success'
@@ -308,6 +332,8 @@ paths:
               example:
                 status: failed
                 order_id: Basket no longer in open state
+        '500':
+          description: A server error response
       deprecated: false
 components:
   securitySchemes:
@@ -316,6 +342,9 @@ components:
       description: API key to authorize requests.
       name: appid
       in: query
+    apiKey:
+      type: http
+      scheme: basic
   schemas:
     Basket:
       title: Basket

@@ -2,6 +2,7 @@ openapi: 3.0.0
 info:
   title: Basket
   description: This is the API for adding products to a basket for checking out and ordering.
+
   contact:
     name: Example Support
     email: support@example.com
@@ -9,6 +10,7 @@ info:
   version: '1.0'
 servers:
 - url: https://example.com
+
   variables: {}
 paths:
   /basket/get:
@@ -43,10 +45,12 @@ paths:
                   quantity: 1
                 - id: ABC-TOP-789
                   quantity: 3
+
         500:
           description: Internal server error
       deprecated: false
   /basket/submit-to-order:
+
     get:
       tags:
       - Misc

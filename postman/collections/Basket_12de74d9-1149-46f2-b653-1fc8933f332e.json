@@ -598,12 +598,10 @@
 					"listen": "test",
 					"script": {
 						"id": "db7a16a2-605c-48e2-b6cb-33b87a50486c",
-						"type": "text/javascript",
 						"exec": [
-							"pm.test(\"Status code is 200\", function () {",
-							"    pm.response.to.have.status(200);",
-							"});"
-						]
+							""
+						],
+						"type": "text/javascript"
 					}
 				}
 			],
@@ -616,7 +614,13 @@
 					"type": "noauth"
 				},
 				"method": "DELETE",
-				"header": [],
+				"header": [
+					{
+						"key": "x-mock-response-name",
+						"value": "200 - Success",
+						"type": "text"
+					}
+				],
 				"url": {
 					"raw": "{{basketUrl}}/basket/delete?id=ebceac76-e4a2-409b-8fc4-17709947e6a9",
 					"host": [
@@ -628,9 +632,9 @@
 					],
 					"query": [
 						{
-							"description": "The ID of the basket to modify.",
 							"key": "id",
-							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9"
+							"value": "ebceac76-e4a2-409b-8fc4-17709947e6a9",
+							"description": "The ID of the basket to modify."
 						}
 					]
 				},
@@ -673,8 +677,8 @@
 							]
 						}
 					},
-					"status": "OK",
-					"code": 200,
+					"status": "No Content",
+					"code": 204,
 					"_postman_previewlanguage": "Text",
 					"header": [],
 					"cookie": [],

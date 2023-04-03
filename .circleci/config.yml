@@ -14,7 +14,8 @@ jobs:
           name: Login using your API key
           command: postman login --with-api-key $POSTMAN_API_KEY
       - run: |
-            postman collection run "postman/collections/Basket_a1fcb308-b435-4822-895b-b1e7859d1e5c.json" -e "16341000-6d0574f1-313e-4719-9949-e7bb79ee337f" --integration-id "104076-${CIRCLE_WORKFLOW_JOB_ID}"
+            # postman collection run "postman/collections/Basket_a1fcb308-b435-4822-895b-b1e7859d1e5c.json" -e "16341000-6d0574f1-313e-4719-9949-e7bb79ee337f" --integration-id "104076-${CIRCLE_WORKFLOW_JOB_ID}"
+            postman collection run "postman/collections/Basket_12de74d9-1149-46f2-b653-1fc8933f332e.json" -e "16341000-6d0574f1-313e-4719-9949-e7bb79ee337f" --integration-id "104076-${CIRCLE_WORKFLOW_JOB_ID}"
       - run:
           name: Lint your API using Postman CLI
           command: postman api lint --integration-id 104076

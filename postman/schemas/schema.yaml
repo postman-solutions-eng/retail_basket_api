@@ -48,7 +48,7 @@ paths:
         '500':
           description: A server error response
       deprecated: false
-  /basket/submit_to_order:
+  /basket/submit-to-order:
     get:
       tags:
       - Misc

@@ -6,9 +6,13 @@ info:
     name: Example Support
     email: support@example.com
     url: support.example.com
+
   version: '1.0'
+security:
+  - apiKey: []
+
 servers:
-- url: https://bec11d1d-2eed-4430-879f-0b2953d6b2b1.mock.pstmn.io
+- url: https://example.com
   variables: {}
 paths:
   /basket/get:
@@ -29,6 +33,7 @@ paths:
           $ref: '#/components/schemas/Basket'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: ''
@@ -64,6 +69,7 @@ paths:
           $ref: '#/components/schemas/Basket'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Submittoorder'
       responses:
         200:
           description: 'Success'
@@ -109,6 +115,7 @@ paths:
           $ref: '#/components/schemas/Basket'
           type: string
           example: 'MTU1MDg2MTI2MDQ0Mg=='
+          $ref: '#/components/schemas/Basket'
       - name: Content-Type
         in: header
         description: ''
@@ -119,6 +126,7 @@ paths:
           $ref: '#/components/schemas/Basket'
           type: string
           example: application/json
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: 'Success'
@@ -159,6 +167,7 @@ paths:
           $ref: '#/components/schemas/Add'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/AddRequest'
       - name: Content-Type
         in: header
         description: ''
@@ -169,6 +178,7 @@ paths:
           $ref: '#/components/schemas/Add'
           type: string
           example: application/json
+          $ref: '#/components/schemas/AddRequest'
       requestBody:
         description: ''
         content:
@@ -213,6 +223,7 @@ paths:
           $ref: '#/components/schemas/Item'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/ChangequantityRequest'
       - name: Content-Type
         in: header
         description: ''
@@ -223,6 +234,7 @@ paths:
           $ref: '#/components/schemas/Item'
           type: string
           example: application/json
+          $ref: '#/components/schemas/ChangequantityRequest'
       requestBody:
         description: ''
         content:
@@ -261,6 +273,7 @@ paths:
           $ref: '#/components/schemas/Create_200'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Basket'
       - name: Content-Type
         in: header
         description: ''
@@ -271,6 +284,7 @@ paths:
           $ref: '#/components/schemas/Create_200'
           type: string
           example: application/json
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: ''
@@ -296,6 +310,7 @@ paths:
           $ref: '#/components/schemas/ChangequantityRequest'
           type: string
           example: 'ebceac76-e4a2-409b-8fc4-17709947e6a9'
+          $ref: '#/components/schemas/Basket'
       - name: Content-Type
         in: header
         description: ''
@@ -306,6 +321,7 @@ paths:
           $ref: '#/components/schemas/ChangequantityRequest'
           type: string
           example: application/json
+          $ref: '#/components/schemas/Basket'
       responses:
         200:
           description: 'Success'
@@ -391,6 +407,12 @@ paths:
 
 components:
   securitySchemes:
+    app_id:
+      type: apiKey
+      description: API key to authorize requests.
+      name: appid
+      in: query
+    apiKey:
     BasicAuth:
       type: http
       scheme: basic

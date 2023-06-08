@@ -7,18 +7,17 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install the Postman CLI
+          name: Install Postman CLI
           command: |
             curl -o- "https://dl-cli.pstmn.io/install/linux64.sh" | sh
       - run:
           name: Login using your API key
           command: postman login --with-api-key $POSTMAN_API_KEY
       - run: |
-            # postman collection run "postman/collections/Basket_a1fcb308-b435-4822-895b-b1e7859d1e5c.json" -e "16341000-6d0574f1-313e-4719-9949-e7bb79ee337f" --integration-id "104076-${CIRCLE_WORKFLOW_JOB_ID}"
-            postman collection run "postman/collections/Basket_12de74d9-1149-46f2-b653-1fc8933f332e.json" -e "16341000-6d0574f1-313e-4719-9949-e7bb79ee337f" --integration-id "104076-${CIRCLE_WORKFLOW_JOB_ID}"
+            postman collection run "postman/collections/Basket.json" -e "24113304-4d469107-80f0-4518-a502-03a3ac6fd2f3" --integration-id "104076-${CIRCLE_WORKFLOW_JOB_ID}"
       - run:
           name: Lint your API using Postman CLI
-          command: postman api lint --integration-id 104076
+          command: postman api lint a903df65-051d-404a-a6e7-913b34558295 --integration-id 104076
 
 workflows:
   version: 2

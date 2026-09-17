@@ -16,6 +16,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
+        with:
+          persist-credentials: false
       - uses: matt-ball/newman-action@master
         with:
           collection: postman/collections/Basket_070c5030-e416-4c11-a9e6-767663a3a6a9.json
